@@ -35,4 +35,64 @@ The system allows users to browse movies, book tickets, and manage bookings, whi
 ---
 
 ## 📂 Project Structure
+Movie_management_system/
+├── Areas/
+│ ├── Admin/ # Admin controllers, views
+│ └── User/ # User controllers, views
+├── Controllers/ # Common controllers (Login, Register, etc.)
+├── DTOs/ # Data Transfer Objects
+├── wwwroot/ # Static assets (css, js, images)
+├── Movie_management_system.csproj
+└── Program.cs
 
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- [Visual Studio 2022](https://visualstudio.microsoft.com/vs/)
+- .NET 6 SDK
+- SQL Server
+
+### Setup
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Prit-Kanani/MovieTicketBooking_Frontend.git
+Open the solution in Visual Studio 2022
+
+Restore dependencies:
+dotnet restore
+
+Update database (if EF migrations are used):
+
+dotnet ef database update
+
+Run the project:
+
+dotnet run
+
+
+Roadmap
+
+ Implement seat selection in booking
+
+ Add payment gateway integration
+
+ Add movie reviews & ratings
+
+ Improve UI/UX with animations
+
+🤝 Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss.
+
+📜 License
+
+This project is licensed under the MIT License – feel free to use and modify.
+
+
+---
+
+⚡ Question:  
+Do you also want me to create a **`README.md` file inside the repo automatically** (so you just commit it), or do you wan
