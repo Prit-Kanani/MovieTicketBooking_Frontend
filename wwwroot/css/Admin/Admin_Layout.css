@@ -1,0 +1,67 @@
+﻿/* -------------------- RESET -------------------- */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: Arial, sans-serif;
+}
+
+/* -------------------- LAYOUT -------------------- */
+#adminLayoutContainer {
+    display: flex;
+    flex-direction: column; /* only main content below navbar */
+    height: 100%;
+    position: relative;
+    margin-top: 0; /* no margin at the top */
+}
+
+/* -------------------- MAIN CONTENT -------------------- */
+.main-content {
+    width: 100%; /* full width */
+    padding-top: 60px; /* height of navbar */
+    transition: margin-left 0.3s;
+}
+
+/* -------------------- NAVBAR -------------------- */
+.navbar {
+    position: fixed; /* stick to viewport */
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: #343a40;
+    overflow: visible;
+}
+
+
+    .navbar .dropdown-menu {
+        z-index: 1100; /* always above main content */
+    }
+
+/* -------------------- ACCORDION (if any left in main content) -------------------- */
+.accordion-header {
+    padding: 10px;
+    margin: 10px 0;
+    transition: all 0.3s ease;
+    color: #fff;
+    cursor: pointer;
+}
+
+    .accordion-header:hover {
+        background-color: #8e44ad;
+        color: #fff;
+        border-radius: 10px;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(142, 68, 173, 0.25);
+    }
+
+/* -------------------- RESPONSIVE -------------------- */
+@media (max-width: 768px) {
+    .main-content {
+        padding-top: 60px; /* same navbar spacing */
+    }
+
+    .navbar .dropdown-menu {
+        width: 100%; /* full width on small screens */
+    }
+}

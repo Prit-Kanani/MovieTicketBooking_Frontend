@@ -1,0 +1,151 @@
+﻿/* kept visually consistent with Admin_AddUser.css but more modern */
+.admin-users-container.details-container {
+    padding: 2rem;
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.details-form {
+    width: 100%;
+    max-width: 1100px;
+    background: #fff;
+    padding: 2rem;
+    border-radius: 14px;
+    box-shadow: 0 6px 30px rgba(20,20,40,0.06);
+}
+
+.details-grid {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 1.5rem;
+    align-items: start;
+}
+
+.left-panel {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.profile-card {
+    width: 100%;
+    text-align: center;
+}
+
+.image-wrap {
+    width: 260px;
+    height: 260px;
+    border-radius: 14px;
+    overflow: hidden;
+    position: relative;
+    margin: 0 auto 1rem;
+    border: 2px solid #f0eefb;
+    background: linear-gradient(180deg, #faf7ff, #fff);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+    .image-wrap img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+.image-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    padding: 0.75rem;
+    pointer-events: none;
+}
+
+.btn-image-edit {
+    pointer-events: auto;
+    background: rgba(0,0,0,0.55);
+    color: #fff;
+    border: none;
+    padding: 0.45rem 0.9rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.image-actions {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* right panel form styles */
+.form-inner {
+    padding: 0.25rem 0;
+}
+
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.45rem;
+    color: #333;
+}
+
+input.form-control, select.form-control {
+    width: 100%;
+    padding: 0.7rem 0.9rem;
+    border-radius: 8px;
+    border: 1.5px solid #e8e8f5;
+    background: #fbfbfd;
+    transition: box-shadow .18s, border .18s;
+}
+
+    input.form-control[disabled] {
+        opacity: 0.75;
+        cursor: not-allowed;
+    }
+
+.form-actions {
+    margin-top: 1.25rem;
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+/* button styles consistent with your theme */
+.btn-primary {
+    background: #7d34e3;
+    color: #fff;
+    padding: 0.7rem 1.25rem;
+    border-radius: 8px;
+    border: none;
+    font-weight: 700;
+}
+
+.btn-secondary {
+    background: #eef0f6;
+    color: #333;
+    padding: 0.65rem 1.1rem;
+    border-radius: 8px;
+    border: none;
+    font-weight: 600;
+}
+
+.success-message, .error-message {
+    max-width: 1100px;
+    margin: 0 auto 1rem auto;
+    padding: 0.85rem 1rem;
+    border-radius: 8px;
+}

@@ -1,0 +1,76 @@
+﻿@model Movie_management_system.DTOs.ShowSeatMapDTO
+@{
+    Layout = "~/Areas/User/Views/Shared/_UserLayout.cshtml";
+    ViewData["Title"] = "Book Seats";
+}
+<link href="~/css/User/Booking.css" rel="stylesheet" />
+
+<div class="container booking-page mt-4">
+    <div class="booking-header card-like">
+        <h2>🎟 Book Seats</h2>
+        <div class="meta">
+            <div><strong>Theatre:</strong> @Model.Theatre</div>
+            <div><strong>Screen:</strong> @Model.ScreenNo</div>
+            <div><strong>Date:</strong> @Model.Date</div>
+            <div><strong>Time:</strong> @Model.Time</div>
+            <div><strong>Price/Seat:</strong> ₹@Model.Price</div>
+        </div>
+    </div>
+
+    <div class="legend card-like d-flex justify-content-between align-items-center flex-wrap">
+        <div class="legend-items d-flex flex-wrap gap-3">
+            <span class="legend-item">
+                <span class="legend-box available"></span> Available
+            </span>
+            <span class="legend-item">
+                <span class="legend-box selected"></span> Selected
+            </span>
+            <span class="legend-item">
+                <span class="legend-box mine"></span> Your Previous Booking
+            </span>
+            <span class="legend-item">
+                <span class="legend-box others"></span> Booked by Others
+            </span>
+        </div>
+
+        <div class="actions mt-2 mt-md-0">
+            <button type="submit" form="bookingForm" class="btn btn-primary">Confirm Booking</button>
+        </div>
+    </div>
+
+    <form asp-area="User" asp-action="ConfirmBooking" asp-controller="Booking" method="post" id="bookingForm" class="card-like">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="showId" value="@Model.ShowId" />
+
+        <div class="seat-layout">
+            @{
+                var my = new HashSet<int>(Model.MyBookedSeats ?? new List<int>());
+                var other = new HashSet<int>(Model.OthersBookedSeats ?? new List<int>());
+                var total = Model.TotalSeats;
+            }
+
+            @for (int i = 1; i <= total; i++)
+            {
+                var isMine = my.Contains(i);
+                var isOthers = other.Contains(i);
+                var stateClass = isMine ? "mine" : isOthers ? "others" : "available";
+                var disabledAttr = (isMine || isOthers) ? "disabled" : "";
+                <label class="seat @stateClass">
+                    <input type="checkbox" name="selectedSeats" value="@i" @(disabledAttr) />
+                    <span>@i</span>
+                </label>
+            }
+        </div>
+    </form>
+</div>
+
+<script>
+    // Toggle "selected" class for available seats only
+    document.querySelectorAll('.seat.available input[type="checkbox"]').forEach(cb => {
+        cb.addEventListener('change', (e) => {
+            const seat = e.target.closest('.seat');
+            if (e.target.checked) seat.classList.add('selected');
+            else seat.classList.remove('selected');
+        });
+    });
+</script>

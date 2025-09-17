@@ -1,0 +1,68 @@
+# Build results
+bin/
+obj/
+[Bb]uild/
+[Bb]uilds/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+*.dll
+*.exe
+*.app
+*.log
+
+# Visual Studio cache
+.vs/
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# ASP.NET temp
+Generated_Code/
+_ReSharper*/
+_ReSharper.Caches/
+[Tt]est[Rr]esult*/
+[Rr]elease*/
+[Dd]ebug*/
+publish/
+node_modules/
+wwwroot/lib/
+
+# NuGet
+*.nupkg
+*.snupkg
+*.nuspec
+packages/
+.nuget/
+project.lock.json
+project.fragment.lock.json
+
+# Logs
+*.log
+*.tlog
+*.svclog
+*.pidb
+
+# Database
+*.mdf
+*.ldf
+*.ndf
+
+# OS generated
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# Rider / JetBrains
+.idea/
+*.iml
+
+# Others
+*.bak
+*.backup
+*.tmp
+*.cache

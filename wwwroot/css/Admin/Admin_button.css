@@ -1,0 +1,56 @@
+﻿.btn-go-back {
+    position: relative;
+    display: inline-block;
+    width: 160px;
+    height: 48px;
+    background: #ffffff; /* white button */
+    border-radius: 24px;
+    overflow: hidden;
+    text-decoration: none;
+    cursor: pointer;
+    color: #000; /* initial black text */
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+    /* Centered text initially */
+    .btn-go-back .btn-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        transition: opacity 0.3s;
+        z-index: 5;
+    }
+
+    /* Green bar + arrow */
+    .btn-go-back .bar {
+        position: absolute;
+        top: 4px;
+        left: 4px;
+        width: 0; /* initially hidden */
+        height: 40px;
+        background: #22c55e;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: width 0.5s;
+        overflow: hidden;
+        z-index: 10;
+    }
+
+        .btn-go-back .bar svg {
+            width: 20px;
+            height: 20px;
+            fill: #000; /* arrow color */
+        }
+
+    /* Hover effect */
+    .btn-go-back:hover .bar {
+        width: 100%; /* expand green bar */
+    }
+
+    .btn-go-back:hover .btn-text {
+        opacity: 0; /* hide the centered text */
+    }

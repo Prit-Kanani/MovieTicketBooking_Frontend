@@ -1,0 +1,220 @@
+﻿/* 🌌 Global Dark Theme */
+body {
+    background: linear-gradient(135deg, #0d0d0d, #1a1a1a);
+    color: #eaeaea;
+    font-family: 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Card-like container matching MovieDetails cards (#2a2a2a) */
+.card-like {
+    background: #2a2a2a;
+    color: #eaeaea;
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin-bottom: 14px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.5);
+}
+
+/* Header */
+.booking-header h2 {
+    margin: 0 0 8px;
+    color: #ff4b2b;
+    font-weight: 700;
+}
+
+.booking-header .meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 6px 16px;
+    font-size: 0.95rem;
+}
+
+/* Legend */
+.legend {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.legend-item {
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+    font-size: 0.95rem;
+}
+
+.legend-box {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    display: inline-block;
+    border: 1px solid #444;
+}
+
+    .legend-box.available {
+        background: #f0f0f0;
+    }
+
+    .legend-box.selected {
+        background: #7bd389;
+    }
+
+    .legend-box.mine {
+        background: #2f8f2f;
+    }
+
+    .legend-box.others {
+        background: #d35b5b;
+    }
+.legend.card-like {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    background: #2a2a2a;
+    padding: 12px 16px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+.legend-items {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.9rem;
+    color: #f5f5f5;
+}
+
+.legend-box {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+    /* colors */
+    .legend-box.available {
+        background: #2a2a2a;
+        border: 1px solid #777;
+    }
+
+    .legend-box.selected {
+        background: #90ee90;
+    }
+
+    .legend-box.mine {
+        background: #006400;
+    }
+
+    .legend-box.others {
+        background: #b22222;
+    }
+
+/* Seat layout grid */
+.seat-layout {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr); /* always 10 seats per row */
+    gap: 8px;
+    margin-top: 20px;
+    justify-items: center;
+}
+
+.row-break {
+    flex-basis: 100%;
+    height: 0;
+}
+
+.seat {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    background: #2a2a2a;
+    border-radius: 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+    .seat input {
+        display: none;
+    }
+
+    .seat span {
+        color: #fff;
+        font-size: 0.85rem;
+    }
+    .seat:hover {
+        background: #444;
+    }
+
+    .seat.available input:checked + span {
+        font-weight: bold;
+        background: #90ee90;
+        border-radius: 4px;
+        padding: 2px 6px;
+    }
+
+    /* Hover for clickable seats only */
+    .seat.available:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,.5);
+    }
+
+    /* Selected (light green) */
+    .seat.available.selected {
+        background: #7bd389;
+        color: #102910;
+    }
+
+    /* Mine (dark green) — not selectable */
+    .seat.mine {
+        background: #2f8f2f;
+        color: #eaeaea;
+        cursor: not-allowed;
+        box-shadow: inset 0 0 0 2px #1d5e1d;
+    }
+
+    /* Others (red) — not selectable */
+    .seat.others {
+        background: #d35b5b;
+        color: #fff;
+        cursor: not-allowed;
+        box-shadow: inset 0 0 0 2px #8b2f2f;
+    }
+
+        /* Disabled checkbox (mine/others) keeps visual lock */
+        .seat.mine input,
+        .seat.others input {
+            pointer-events: none;
+        }
+
+/* Actions */
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 14px;
+}
+
+.btn.btn-primary {
+    background: #2a2a2a !important;
+    border: 1px solid #444 !important;
+    color: #eaeaea !important;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 8px;
+    transition: background .2s ease, border-color .2s ease;
+}
+
+    .btn.btn-primary:hover {
+        background: #333 !important;
+        border-color: #555 !important;
+    }

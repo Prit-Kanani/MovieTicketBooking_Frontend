@@ -1,0 +1,204 @@
+﻿@{
+    Layout = "~/Areas/User/Views/Shared/_UserLayout.cshtml";
+    ViewData["Title"] = "User Dashboard";
+    var movies = ViewBag.TopMovies as List<Movie_management_system.DTOs.MovieDTO>;
+}
+
+@section Styles {
+    <link href="~/css/user/User_Dashboard.css" rel="stylesheet" />
+    <link href="~/css/user/movieSlider.css" rel="stylesheet" />
+}
+
+<div class="container-fluid mt-4">
+    <div class="mt-4">
+        <h4 class="mb-3">🔥 Recommended Movies</h4>
+
+        @if (movies != null && movies.Any())
+        {
+            <div class="movie-slider-wrapper">
+                <div class="movie-slider-viewport">
+                    <button class="slider-arrow slider-prev" aria-label="Previous slide">&#10094;</button>
+
+                    <div class="movie-slider" id="movieSlider">
+                        @foreach (var movie in movies)
+                        {
+                            <div class="movie-slide">
+                                <div class="movie-poster-frame">
+                                    <img src="~/images/@movie.Poster" alt="@movie.Name" class="movie-poster" />
+                                </div>
+
+                                <div class="movie-title-pill">@movie.Name</div>
+
+                                <a asp-area="User" asp-controller="Movie" asp-action="Details"
+                                   asp-route-id="@movie.MovieId"
+                                   class="btn btn-book">
+                                    🎟 Book Now
+                                </a>
+                            </div>
+                        }
+                    </div>
+
+                    <button class="slider-arrow slider-next" aria-label="Next slide">&#10095;</button>
+
+                    <!-- dots are inside viewport so they appear at bottom of the box -->
+                    <div class="movie-dots" id="movieDots" aria-hidden="false"></div>
+                </div>
+            </div>
+        }
+
+
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const slider = document.getElementById("movieSlider");
+            const slides = document.querySelectorAll(".movie-slide");
+            const dotsContainer = document.getElementById("movieDots");
+            const total = slides.length;
+            let current = 0;
+            let autoTimer = null;
+            let isTransitioning = false;
+
+            // timing (ms) — keep this synced with your CSS transition (0.7s)
+            const delay = 5000;          // visible time per slide
+            const transitionMs = 700;    // must match CSS transition duration
+
+            if (!slider) return;
+
+            // Build dots (if not already built elsewhere)
+            if (dotsContainer && total > 1 && dotsContainer.children.length === 0) {
+                for (let i = 0; i < total; i++) {
+                    const dot = document.createElement("button");
+                    dot.className = "dot";
+                    dot.dataset.index = i;
+                    dot.addEventListener("click", () => {
+                        manualGoTo(parseInt(dot.dataset.index));
+                    });
+                    dotsContainer.appendChild(dot);
+                }
+                dotsContainer.children[0].classList.add("active");
+            }
+
+            function updateDots(idx) {
+                if (!dotsContainer) return;
+                Array.from(dotsContainer.children).forEach((d, i) => {
+                    d.classList.toggle("active", i === idx);
+                });
+            }
+
+            function goTo(index) {
+                // prevent overlapping transitions
+                if (isTransitioning) return;
+                const idx = ((index % total) + total) % total; // normalize
+                if (idx === current) return; // nothing to do
+                isTransitioning = true;
+                current = idx;
+                slider.style.transform = `translateX(-${current * 100}%)`;
+                updateDots(current);
+
+                // clear any pending auto timer while transitioning
+                if (autoTimer) {
+                    clearTimeout(autoTimer);
+                    autoTimer = null;
+                }
+
+                // after CSS transition ends, clear flag and schedule next auto
+                setTimeout(() => {
+                    isTransitioning = false;
+                    scheduleAuto(); // start next cycle after full delay
+                }, transitionMs);
+            }
+
+            // wrapper used by auto scheduler to advance
+            function next() {
+                goTo(current + 1);
+            }
+
+            function scheduleAuto() {
+                // don't schedule if only one slide
+                if (total <= 1) return;
+                // clear prior timer
+                if (autoTimer) clearTimeout(autoTimer);
+                // start a fresh timer that will call next only if not transitioning
+                autoTimer = setTimeout(() => {
+                    if (!isTransitioning) {
+                        next();
+                    } else {
+                        // if transition somehow still running, try again slightly later
+                        scheduleAuto();
+                    }
+                }, delay);
+            }
+
+            function stopAuto() {
+                if (autoTimer) {
+                    clearTimeout(autoTimer);
+                    autoTimer = null;
+                }
+            }
+
+            function restartAuto() {
+                stopAuto();
+                // give a tiny pause before scheduling to avoid instant next
+                scheduleAuto();
+            }
+
+            // manual navigation from dots/arrows should use this
+            function manualGoTo(idx) {
+                // allow immediate manual navigation even if in transition? we ignore during transition to keep smoothness
+                if (isTransitioning) return;
+                goTo(idx);
+            }
+
+            // Pause on hover, resume on leave
+            const viewport = document.querySelector(".movie-slider-viewport");
+            if (viewport) {
+                viewport.addEventListener("mouseenter", () => {
+                    stopAuto();
+                });
+                viewport.addEventListener("mouseleave", () => {
+                    restartAuto();
+                });
+            }
+
+            // wire arrows if present
+            const prevBtn = document.querySelector(".slider-prev");
+            const nextBtn = document.querySelector(".slider-next");
+
+            if (prevBtn) {
+                prevBtn.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    if (!isTransitioning) { goTo(current - 1); restartAuto(); }
+                });
+            }
+            if (nextBtn) {
+                nextBtn.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    if (!isTransitioning) { goTo(current + 1); restartAuto(); }
+                });
+            }
+
+            // keyboard navigation
+            document.addEventListener("keydown", function (e) {
+                if (e.key === "ArrowRight") { if (!isTransitioning) { goTo(current + 1); restartAuto(); } }
+                if (e.key === "ArrowLeft") { if (!isTransitioning) { goTo(current - 1); restartAuto(); } }
+            });
+
+            // initialize position and start auto-loop (give the first slide its full delay)
+            slider.style.transform = `translateX(0%)`;
+            updateDots(0);
+            scheduleAuto();
+
+            // keep transform continuity on resize
+            window.addEventListener("resize", function () {
+                slider.style.transition = "none";
+                slider.style.transform = `translateX(-${current * 100}%)`;
+                void slider.offsetWidth;
+                slider.style.transition = "";
+            });
+        });
+    </script>
+}
+

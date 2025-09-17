@@ -1,0 +1,108 @@
+﻿@using Movie_management_system.Helper
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title> Movie Mine</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="icon" type="image/png" href="~/images/Movie_Mine.png" />
+    <meta name="description" content="Movie Mine - A sleek and fast movie ticket booking platform for all your cinema needs." />
+    <meta name="author" content="Prit Kanani" />
+    <meta name="keywords" content="movie, booking, cinema, ticket, showtime, MovieMine, Theatre" />
+    @RenderSection("Styles", required: false)
+    <link rel="stylesheet" href="~/css/ToastMessage.css"></link>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+        <div class="container-fluid">
+            <a asp-area="User" asp-controller="Dashboard" asp-action="Index" class="navbar-brand fw-bold">🎬 Movie Mine</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="User" asp-controller="Movie" asp-action="Index" >Movies</a>
+                    </li>
+                </ul>
+
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                            <!-- Profile image -->
+                            <img id="profileImage" src="~/images/default_user.png" class="rounded-circle me-2" width="32" height="32" />
+                            <span>@TokenManager.Name</span> <!-- Show user email or name -->
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" asp-area="User" asp-controller="Dashboard" asp-action="Details" asp-route-id="@TokenManager.UserId" >Details</a></li>
+                            <li>
+                                <a class="dropdown-item" asp-area="User" asp-controller="Dashboard" asp-action="Logout">Logout</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- Toasts -->
+    @if (TempData.Peek("Success") != null || TempData.Peek("Error") != null)
+    {
+        <div class="toast-container">
+            @if (TempData.Peek("Success") != null)
+            {
+                <div class="toast-message toast-success">
+                    @TempData["Success"]
+                    <button onclick="this.parentElement.style.display='none'">✖</button>
+                </div>
+            }
+            @if (TempData.Peek("Error") != null)
+            {
+                <div class="toast-message toast-error">
+                    @TempData["Error"]
+                    <button onclick="this.parentElement.style.display='none'">✖</button>
+                </div>
+            }
+        </div>
+    }
+
+    <div class="container pt-4">
+        @RenderBody()
+    </div>
+    
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let email = "@TokenManager.Email"; // inject C# email into JS
+            if (email && email.trim() !== "") {
+                let extensions = [".png", ".jpg", ".jpeg", ".gif", ".webp"]; // supported formats
+                let found = false;
+
+                // Try each extension until one exists
+                (async function checkImages() {
+                    for (let ext of extensions) {
+                        let imgUrl = `/images/${email}${ext}`;
+                        try {
+                            let res = await fetch(imgUrl, { method: "HEAD" });
+                            if (res.ok) {
+                                document.getElementById("profileImage").src = imgUrl;
+                                found = true;
+                                break;
+                            }
+                        } catch (err) {
+                            console.error("Error checking:", imgUrl, err);
+                        }
+                    }
+
+                    // If none found, fallback image will stay
+                    if (!found) {
+                        console.log("No profile image found. Using default.");
+                    }
+                })();
+            }
+        });
+    </script>
+
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

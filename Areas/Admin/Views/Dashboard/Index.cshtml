@@ -1,0 +1,83 @@
+﻿@{
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Admin Dashboard";
+    var movies = ViewBag.TopMovies as List<Movie_management_system.DTOs.MovieDTO>;
+}
+@section Styles {
+    <link href="~/css/admin/Admin_Dashboard.css" rel="stylesheet" />
+}
+<div class="container-fluid mt-4">
+    <h2 class="mb-4"> Dashboard</h2>
+
+    <div class="row g-4 mb-5">
+        <!-- Total Movies -->
+        <div class="col-md-4">
+            <div class="card text-white bg-primary shadow-sm h-100">
+                <div class="card-body d-flex align-items-center">
+                    <div class="me-3 fs-1">🎥</div>
+                    <div>
+                        <h5 class="card-title mb-1">Total Movies</h5>
+                        <h3 class="card-text">@ViewBag.MovieCount</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Users -->
+        <div class="col-md-4">
+            <div class="card text-white bg-success shadow-sm h-100">
+                <div class="card-body d-flex align-items-center">
+                    <div class="me-3 fs-1">👤</div>
+                    <div>
+                        <h5 class="card-title mb-1">Total Users</h5>
+                        <h3 class="card-text">@ViewBag.UserCount</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Bookings -->
+        <div class="col-md-4">
+            <div class="card text-white bg-danger shadow-sm h-100">
+                <div class="card-body d-flex align-items-center">
+                    <div class="me-3 fs-1">🎫</div>
+                    <div>
+                        <h5 class="card-title mb-1">Total Bookings</h5>
+                        <h3 class="card-text">@ViewBag.BookingCount</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🎬 Top Movies Section -->
+    <div class="mt-5">
+        <h4 class="mb-3">🎬 Top Movies</h4>
+
+        @if (movies != null && movies.Any())
+        {
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+                @foreach (var movie in movies)
+                {
+                    <div class="col">
+                        <div class="card h-100 shadow-sm border-0">
+                            <img src="~/images/@movie.Poster" class="card-img-top" alt="@movie.Name" style="height: 250px; object-fit: cover;" />
+                            <div class="card-body">
+                                <h5 class="card-title">@movie.Name</h5>
+                                <p class="card-text">
+                                    <strong>Genre:</strong> @(movie.Genres != null ? string.Join(", ", movie.Genres) : "N/A") <br />
+                                    <strong>Duration:</strong> @movie.Duration mins <br />
+                                    <strong>Language:</strong> @movie.Language
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-warning">No movies found.</div>
+        }
+    </div>
+</div>

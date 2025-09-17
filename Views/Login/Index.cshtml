@@ -1,0 +1,46 @@
+﻿@{
+    Layout = "_LoginLayout";
+}
+@model LoginViewModel
+
+@section Styles {
+    <link href="~/css/login.css" rel="stylesheet" />
+}
+
+<div class="login-bg">
+    <div class="login-card">
+        <div class="logo">Movie Mine</div>
+        <div class="subtitle">Sign In</div>
+
+       
+
+        <form asp-action="Index" asp-controller="Login" method="post" class="needs-validation w-100" novalidate>
+            <div class="input-container">
+                <input asp-for="Email"
+                       class="styled_input_bar"
+                       placeholder="Type your email"
+                       type="email"
+                       id="styled_input_bar" 
+                       name="Email"/>
+                <label class="input-label" for="styled_input_bar">Type your email</label>
+            </div>
+            <span asp-validation-for="Email" class="text-danger d-block text-center"></span>
+
+            <div class="input-container">
+                <input asp-for="Password" type="password" class="styled_input_bar" name="Password" placeholder=" " />
+                <label class="input-label" for="Password">Enter your password</label>
+            </div>
+            <span asp-validation-for="Password" class="text-danger"></span>
+
+            <div class="d-flex justify-content-center mt-3">
+                <button type="submit" class="btn btn-custom" data-glitch=" Sign_in"> Sign in</button>
+                <button type="button" class="btn btn-custom" data-glitch="Cancel" onclick="window.location.href='@Url.Action("Index", "Login")'">Cancel</button>
+            </div>
+
+        </form>
+        <p class="mt-4 text-center small" style="color:#bbb;">
+            New to Movie Mine?
+            <a asp-controller="Register" asp-action="Index">Sign up now</a>
+        </p>
+    </div>
+</div>

@@ -1,0 +1,301 @@
+﻿@model Movie_management_system.DTOs.UserEditDTO
+
+@{
+    ViewData["Title"] = "User Details";
+    Layout = "~/Areas/User/Views/Shared/_UserLayout.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/User/User_Details.css" />
+
+<div class="admin-users-container details-container">
+    <h2 class="page-title">Your Profile</h2>
+
+    @* IMPORTANT: form posts to Details (POST) in your controller *@
+    <form asp-area="User" asp-controller="Dashboard" asp-action="Details" method="post" enctype="multipart/form-data" class="details-form">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="UserId" />
+
+        <div class="details-grid">
+            <div class="left-panel">
+                <div class="profile-card">
+                    <div class="image-wrap" id="imageWrap">
+                        @* Use server-provided URL if available, else fallback to default *@
+                        <img id="profileImage"
+                             src="@(ViewBag.ProfileImageUrl ?? Url.Content("~/images/default_user.png"))"
+                             alt="Profile"
+                             onerror="this.onerror=null; this.src='/images/default_user.png';" />
+                        <div class="image-overlay">
+                            <button type="button" id="changeImageBtn" class="btn-image-edit" title="Change profile image">
+                                Edit
+                            </button>
+                        </div>
+                    </div>
+
+                    <input type="file" id="profileFileInput" name="ProfileImage" accept="image/*" style="display:none" />
+
+                    <div class="image-actions">
+                        <button type="button" id="imageCancelBtn" class="btn btn-secondary hidden">Cancel</button>
+                    </div>
+
+                    <div class="profile-actions">
+                        <button type="button" id="editToggleBtn" class="btn btn-primary">Edit Profile</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-panel">
+                <div class="form-inner">
+                    <div class="form-group">
+                        <label asp-for="Name"></label>
+                        <input asp-for="Name" class="form-control lockable" disabled />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Email"></label>
+                        <input asp-for="Email" class="form-control lockable" disabled />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Password"></label>
+                        <input asp-for="Password" type="password" class="form-control lockable" disabled placeholder="••••••••" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                        <small class="muted">Leave blank to keep current password.</small>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" id="saveBtn" class="btn btn-primary hidden">Save Changes</button>
+                        <a asp-area="User" asp-controller="Dashboard" asp-action="Index" class="btn btn-secondary">Back</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Elements (IDs must match your view)
+            const profileImage = document.getElementById('profileImage');
+            const fileInput = document.getElementById('profileFileInput');
+            const changeImageBtn = document.getElementById('changeImageBtn');
+            const imageCancelBtn = document.getElementById('imageCancelBtn');
+            const editBtn = document.getElementById('editToggleBtn');
+            const saveBtn = document.getElementById('saveBtn');
+            const lockables = document.querySelectorAll('.lockable');
+
+            if (!profileImage || !fileInput || !editBtn) {
+                console.error('Essential elements missing (profileImage, fileInput or editBtn).');
+                return;
+            }
+
+            // Layout avatar selectors — tune if your layout uses different IDs/classes
+            const layoutSelectors = [
+                '#layoutProfileImage', '#navProfileImage', '#topbarProfileImage', '#userAvatar',
+                '.nav-profile-image', '.layout-profile-image', '.user-avatar', 'img[data-role="user-avatar"]',
+                '.avatar', '.profile-avatar'
+            ];
+
+            // find layout nodes (img or other elements)
+            function findLayoutNodes() {
+                const nodes = new Set();
+                layoutSelectors.forEach(sel => {
+                    try {
+                        document.querySelectorAll(sel).forEach(n => {
+                            if (n) nodes.add(n);
+                        });
+                    } catch (e) { /* ignore bad selectors */ }
+                });
+                // remove page image if matched
+                nodes.delete(profileImage);
+                return Array.from(nodes);
+            }
+
+            // Also include images that match the filename part, in case layout image lacks a stable selector
+            function includeMatchingSrcImgs(nodes) {
+                const arr = Array.from(nodes);
+                try {
+                    const filePart = (profileImage.src || '').split('/').pop();
+                    if (filePart) {
+                        document.querySelectorAll('img').forEach(img => {
+                            if (img !== profileImage && img.src && img.src.indexOf(filePart) !== -1 && !arr.includes(img)) {
+                                arr.push(img);
+                            }
+                        });
+                    }
+                } catch (e) {}
+                return arr;
+            }
+
+            let layoutNodes = findLayoutNodes();
+            layoutNodes = includeMatchingSrcImgs(layoutNodes);
+
+            // Save original sources so we can fully restore
+            let originalImageSrc = profileImage.src || '';
+            const originalLayoutSrcs = new Map();
+            layoutNodes.forEach(n => {
+                if (n.tagName && n.tagName.toLowerCase() === 'img') originalLayoutSrcs.set(n, n.src || '');
+                else originalLayoutSrcs.set(n, window.getComputedStyle(n).backgroundImage || '');
+            });
+
+            // If layout nodes not found now, poll a few times (handles late-rendering layouts)
+            if (layoutNodes.length === 0) {
+                let tries = 0;
+                const poll = setInterval(() => {
+                    tries++;
+                    layoutNodes = findLayoutNodes();
+                    layoutNodes = includeMatchingSrcImgs(layoutNodes);
+                    if (layoutNodes.length > 0 || tries > 6) {
+                        layoutNodes.forEach(n => {
+                            if (!originalLayoutSrcs.has(n)) {
+                                if (n.tagName && n.tagName.toLowerCase() === 'img') originalLayoutSrcs.set(n, n.src || '');
+                                else originalLayoutSrcs.set(n, window.getComputedStyle(n).backgroundImage || '');
+                            }
+                        });
+                        clearInterval(poll);
+                    }
+                }, 250);
+            }
+
+            // preview / edit state
+            let editMode = false;
+            let selectedFile = null;
+            let tempObjectUrl = null;
+
+            // helpers
+            function enableInputs(enable) {
+                lockables.forEach(i => {
+                    if (enable) i.removeAttribute('disabled'); else i.setAttribute('disabled', 'disabled');
+                });
+            }
+            function showSave(show) { if (!saveBtn) return; show ? saveBtn.classList.remove('hidden') : saveBtn.classList.add('hidden'); }
+            function showImageCancel(show) { if (!imageCancelBtn) return; show ? imageCancelBtn.classList.remove('hidden') : imageCancelBtn.classList.add('hidden'); }
+
+            function updateLayoutNodesWithUrl(url) {
+                layoutNodes.forEach(node => {
+                    try {
+                        if (node.tagName && node.tagName.toLowerCase() === 'img') node.src = url;
+                        else node.style.backgroundImage = `url("${url}")`;
+                    } catch (e) { console.warn('Failed updating layout node', e); }
+                });
+            }
+            function restoreLayoutNodes() {
+                layoutNodes.forEach(node => {
+                    const orig = originalLayoutSrcs.get(node) || '';
+                    if (node.tagName && node.tagName.toLowerCase() === 'img') node.src = orig || originalImageSrc;
+                    else node.style.backgroundImage = orig || '';
+                });
+            }
+
+            function revokeTempUrl() {
+                if (tempObjectUrl) {
+                    try { URL.revokeObjectURL(tempObjectUrl); } catch (e) {}
+                    tempObjectUrl = null;
+                }
+            }
+
+            function clearSelectedImagePreview(revertToOriginal = true) {
+                revokeTempUrl();
+                selectedFile = null;
+                try { fileInput.value = ''; } catch (e) {}
+                if (revertToOriginal) {
+                    profileImage.src = originalImageSrc;
+                    restoreLayoutNodes();
+                }
+                showImageCancel(false);
+            }
+
+            // initial UI
+            showSave(false);
+            showImageCancel(false);
+            enableInputs(false);
+
+            // Edit Profile toggle:
+            // - turn on: enable inputs & show Save; image cancel shown only if a file selected
+            // - turn off: treat as Cancel Edit: disable inputs, hide Save, revert image preview if any file had been selected
+            editBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                if (!editMode) {
+                    editMode = true;
+                    enableInputs(true);
+                    showSave(true);
+                    showImageCancel(!!selectedFile);
+                    editBtn.textContent = 'Cancel Edit';
+                } else {
+                    // Cancel the whole edit session
+                    editMode = false;
+                    enableInputs(false);
+                    showSave(false);
+                    clearSelectedImagePreview(true);
+                    editBtn.textContent = 'Edit Profile';
+                }
+            });
+
+            // Image edit click -> only when in edit mode
+            changeImageBtn && changeImageBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                if (!editMode) return;
+                fileInput.click();
+            });
+
+            // File selection -> preview both page and layout avatars
+            fileInput.addEventListener('change', function (e) {
+                const file = e.target.files && e.target.files[0];
+                if (!file) return;
+                if (!file.type.startsWith('image/')) {
+                    alert('Please select an image file.');
+                    fileInput.value = '';
+                    return;
+                }
+
+                // revoke previous temp url if present
+                revokeTempUrl();
+
+                selectedFile = file;
+                try {
+                    tempObjectUrl = URL.createObjectURL(file);
+                    profileImage.src = tempObjectUrl;
+                    updateLayoutNodesWithUrl(tempObjectUrl);
+                } catch (err) {
+                    // fallback to FileReader
+                    const reader = new FileReader();
+                    reader.onload = function (ev) {
+                        profileImage.src = ev.target.result;
+                        updateLayoutNodesWithUrl(ev.target.result);
+                    };
+                    reader.readAsDataURL(file);
+                }
+
+                showImageCancel(true);
+                showSave(true);
+            });
+
+            // Image cancel -> only cancels the image selection/preview, does NOT cancel edit session
+            imageCancelBtn && imageCancelBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                // revert preview but keep edit mode active
+                clearSelectedImagePreview(true);
+                // If still editing, keep showSave true only if other changes exist. We can't reliably detect other changes, so keep Save hidden unless an image or inputs changed — here we'll keep Save visible if editMode and inputs are changed by user. Simpler: showSave(false) only if no other changes; leaving Save visible is OK.
+                if (editMode) {
+                    // hide Save only if no other modification — we can't detect easily, so keep Save shown
+                    showSave(true);
+                }
+            });
+
+            // If server provided non-default image, update originalImageSrc
+            (function setOriginalFromServer() {
+                const src = profileImage.getAttribute('src') || '';
+                if (src) originalImageSrc = src;
+            })();
+
+            // OPTIONAL: when the user navigates away without saving, we might want to revoke object URL; add onbeforeunload
+            window.addEventListener('beforeunload', function () { revokeTempUrl(); });
+
+        });
+    </script>
+}
+

@@ -1,0 +1,102 @@
+﻿@{
+    Layout = "~/Areas/User/Views/Shared/_UserLayout.cshtml";
+    ViewData["Title"] = "All Movies";
+    var movies = ViewBag.Movies as List<Movie_management_system.DTOs.MovieDTO>;
+}
+@section Styles {
+    <link href="~/css/Admin/Admin_Movie.css" rel="stylesheet" />
+    <link href="~/css/Admin/Admin_Movie_CardActions.css" rel="stylesheet" />
+}
+
+
+
+<div class="container-fluid mt-4">
+    <h2 class="mb-4">🎬 All Movies</h2>
+
+    <!-- 🔍 Search & Sort Controls -->
+    <div class="row g-3 mb-4" id="searchFilters">
+        <div class="col-md-4">
+            <input type="text" id="searchByName" class="form-control" placeholder="Search by Movie Name" />
+        </div>
+        <div class="col-md-4">
+            <input type="text" id="searchByLanguage" class="form-control" placeholder="Search by Language" />
+        </div>
+        <div class="col-md-4">
+            <select id="sortBy" class="form-select">
+                <option value="">Sort by</option>
+                <option value="name">Name (A-Z)</option>
+                <option value="duration">Duration (Low → High)</option>
+            </select>
+        </div>
+    </div>
+
+
+    <!-- 🎞️ Movie Cards -->
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4" id="movieContainer">
+        @foreach (var movie in movies)
+        {
+            <div class="col movie-card" data-name="@movie.Name.ToLower()" data-language="@movie.Language.ToLower()" data-duration="@movie.Duration">
+                <div class="card h-100 shadow-sm border-0 movie-hover-container">
+                    <img src="~/images/@movie.Poster"
+                         class="card-img-top" />
+                    <div class="card-body">
+                        <h5 class="card-title">@movie.Name</h5>
+                        <p class="card-text">
+                            <strong>Genre:</strong> @(movie.Genres != null ? string.Join(", ", movie.Genres) : "N/A") <br />
+                            <strong>Duration:</strong> @movie.Duration mins <br />
+                            <strong>Language:</strong> @movie.Language
+                        </p>
+                    </div>
+                    <div class="card-actions">
+                        <a asp-area="User" asp-controller="Movie" asp-action="Details" asp-route-id="@movie.MovieId" class="btn btn-sm btn-warning me-2">Details</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const searchNameInput = document.getElementById('searchByName');
+        const searchLangInput = document.getElementById('searchByLanguage');
+        const sortBySelect = document.getElementById('sortBy');
+        const movieContainer = document.getElementById('movieContainer');
+
+        const originalCards = [...movieContainer.getElementsByClassName('movie-card')];
+
+        function filterAndSortMovies() {
+            const searchName = searchNameInput.value.toLowerCase();
+            const searchLang = searchLangInput.value.toLowerCase();
+            const sortBy = sortBySelect.value;
+
+            let filtered = originalCards.filter(card => {
+                const name = card.dataset.name;
+                const lang = card.dataset.language;
+                return name.includes(searchName) && lang.includes(searchLang);
+            });
+
+            if (sortBy === 'name') {
+                filtered.sort((a, b) => a.dataset.name.localeCompare(b.dataset.name));
+            } else if (sortBy === 'duration') {
+                filtered.sort((a, b) => parseInt(a.dataset.duration) - parseInt(b.dataset.duration));
+            }
+
+            movieContainer.innerHTML = "";
+            filtered.forEach(card => movieContainer.appendChild(card));
+        }
+
+        searchNameInput.addEventListener('input', filterAndSortMovies);
+        searchLangInput.addEventListener('input', filterAndSortMovies);
+        sortBySelect.addEventListener('change', filterAndSortMovies);
+
+        window.addEventListener('load', () => {
+            const btn = document.querySelector('.btn-add-movie');
+            if (btn) {
+                btn.classList.remove('animate__bounceIn');
+                void btn.offsetWidth;
+                btn.classList.add('animate__bounceIn');
+            }
+        });
+    </script>
+}

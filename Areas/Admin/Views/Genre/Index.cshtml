@@ -1,0 +1,71 @@
+﻿@{
+    ViewBag.Title = "Genres";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    var genres = ViewBag.Genres as List<Movie_management_system.Models.Genre>;
+}
+
+@section Styles {
+    <link href="~/css/Admin/Admin_Genres.css" rel="stylesheet" />
+}
+
+<div class="genre-container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="page-title"># Genres</h2>
+        <a asp-area="Admin" asp-controller="Genre" asp-action="AddOrEditGenre" class="btn btn-primary">+ Add Genre</a>
+    </div>
+
+    <table class="table table-striped genre-table">
+        <thead class="table-dark">
+            <tr>
+                <th>Name</th>
+                <th class="text-end">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (genres != null && genres.Any())
+            {
+                foreach (var genre in genres)
+                {
+                    <tr>
+                        <td>@genre.Name</td>
+                        <td class="text-end">
+                            <a asp-area="Admin" asp-controller="Genre" asp-action="AddOrEditGenre" asp-route-id="@genre.GenreId" class="btn btn-sm btn-warning me-2">Edit</a>
+                            <a asp-area="Admin" asp-controller="Genre" asp-action="DeleteGenre" asp-route-id="@genre.GenreId" class="btn btn-sm btn-danger"
+                               onclick="return confirm('Are you sure you want to delete this genre?');">
+                                Delete
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="3" class="text-center text-muted">No genres found.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@if (ViewBag.TotalPages > 1)
+{
+    <nav aria-label="Genres pagination">
+        <ul class="pagination justify-content-center mt-3">
+            <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
+                <a class="page-link" asp-area="Admin" asp-controller="Genre" asp-action="Pagination" asp-route-page="@(ViewBag.CurrentPage - 1)">Previous</a>
+            </li>
+
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                    <a class="page-link" asp-area="Admin" asp-controller="Genre" asp-action="Pagination" asp-route-page="@i">@i</a>
+                </li>
+            }
+
+            <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
+                <a class="page-link" asp-area="Admin" asp-controller="Genre" asp-action="Pagination" asp-route-page="@(ViewBag.CurrentPage + 1)">Next</a>
+            </li>
+        </ul>
+    </nav>
+}

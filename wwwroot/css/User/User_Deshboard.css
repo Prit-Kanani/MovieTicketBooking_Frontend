@@ -1,0 +1,86 @@
+﻿/* Movie Slider Container */
+.movie-slider-container {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    overflow: hidden;
+    border-radius: 15px;
+    box-shadow: 0px 4px 15px rgba(0,0,0,0.2);
+}
+
+/* Slider Track */
+.movie-slider {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+/* Each Slide */
+.movie-slide {
+    min-width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 100%;
+    opacity: 0;
+    transition: all 1s ease-in-out;
+}
+
+    /* Active slide visible */
+    .movie-slide.active {
+        left: 0;
+        opacity: 1;
+    }
+
+/* Poster Image */
+.movie-poster {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 15px;
+}
+
+/* Overlay (movie name + button) */
+.movie-overlay {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    color: #fff;
+    background: rgba(0,0,0,0.5);
+    padding: 15px 25px;
+    border-radius: 10px;
+    transition: all 0.5s ease-in-out;
+    opacity: 0;
+}
+
+/* Show overlay on hover */
+.movie-slide:hover .movie-overlay {
+    opacity: 1;
+    bottom: 40px;
+}
+
+/* Movie Title */
+.movie-title {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+/* Booking Button */
+.btn-book {
+    background: #ff4c4c;
+    border: none;
+    color: #fff;
+    font-weight: bold;
+    padding: 8px 16px;
+    border-radius: 25px;
+    transition: all 0.3s ease-in-out;
+}
+
+    .btn-book:hover {
+        background: #e63939;
+        transform: scale(1.1);
+    }

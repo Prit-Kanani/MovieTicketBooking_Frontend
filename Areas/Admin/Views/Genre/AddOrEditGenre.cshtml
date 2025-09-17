@@ -1,0 +1,36 @@
+﻿@model Movie_management_system.Models.Genre
+@{
+    var isEdit = Model != null && Model.GenreId > 0;
+    ViewData["Title"] = isEdit ? "Edit Genre" : "Add Genre";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section Styles {
+    <link href="~/css/Admin/Admin_Genre_Form.css" rel="stylesheet" />
+}
+
+<div class="genre-form-container">
+    <h2 class="form-title">@(isEdit ? "✏️ Edit Genre" : "➕ Add Genre")</h2>
+
+    <form asp-action="AddOrEditGenre" asp-route-id="@(isEdit ? Model.GenreId : null)" method="post" class="genre-form">
+        @if (isEdit)
+        {
+            <input type="hidden" asp-for="GenreId" />
+        }
+
+        <div class="form-group">
+            <label asp-for="Name" class="form-label"></label>
+            <input asp-for="Name" class="form-control" placeholder="Enter genre name" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-success">@(isEdit ? "Update" : "Save")</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

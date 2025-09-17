@@ -1,0 +1,8 @@
+﻿.action-btns {
+    display: flex;
+    gap: 10px;
+}
+
+.hidden-checkbox {
+    display: none;
+}

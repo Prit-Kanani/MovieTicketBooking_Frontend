@@ -1,0 +1,42 @@
+﻿.movie-hover-container {
+    position: relative;
+    transition: all 0.3s ease-in-out;
+}
+
+.card-actions {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.2s ease-in-out;
+    z-index: 1;
+    display: flex;
+    gap: 8px;
+}
+
+.movie-hover-container:hover .card-actions {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.card-actions .btn {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+}
+
+.movie-hover-container {
+    position: relative;
+    transition: box-shadow 0.3s ease;
+}
+
+.card-actions {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    display: none;
+}
+
+.movie-hover-container:hover .card-actions {
+    display: flex;
+}

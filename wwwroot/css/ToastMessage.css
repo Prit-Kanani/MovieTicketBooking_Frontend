@@ -1,0 +1,80 @@
+﻿/* 🧱 Toast container — fixed, stacked layout */
+.toast-container {
+    position: fixed;
+    margin-top: 20px;
+    top: 20px;
+    right: 20px;
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* 🌈 Base toast style */
+.toast-message {
+    padding: 14px 20px;
+    border-radius: 10px;
+    font-weight: 500;
+    color: #fff;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 260px;
+    max-width: 400px;
+    transition: all 0.3s ease-in-out;
+    opacity: 0;
+    animation: fadeToast 4s ease-in-out forwards;
+    z-index: 10;
+    pointer-events: auto;
+}
+
+/* ✅ Success style */
+.toast-success {
+    background-color: #2ecc71;
+}
+
+/* ❌ Error style */
+.toast-error {
+    background-color: #e74c3c;
+}
+
+/* ✖ Close button */
+.toast-message button {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+    margin-left: auto;
+    transition: transform 0.2s ease;
+    z-index: 5;
+}
+.toast-message.hidden {
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(-20px);
+}
+
+    .toast-message button:hover {
+        transform: scale(1.2);
+    }
+
+/* 🎞️ Fade animation */
+@keyframes fadeToast {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    10%, 90% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+}

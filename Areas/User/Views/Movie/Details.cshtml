@@ -1,0 +1,116 @@
+﻿@model Movie_management_system.DTOs.MovieDetailsViewDTO
+
+@{
+    Layout = "~/Areas/User/Views/Shared/_UserLayout.cshtml"; // ✅ change if needed
+    ViewData["Title"] = Model.Name;
+    <link href="~/css/User/MovieDetails.css" rel="stylesheet" />
+}
+
+<div class="container mt-4 movie-details">
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <img src="~/images/@Model.Poster" class="img-fluid rounded shadow-sm movie-poster" alt="@Model.Name Poster" />
+        </div>
+        <div class="col-md-8">
+            <h2>@Model.Name</h2>
+
+            <div class="movie-info-card">
+                <strong>Language</strong>
+                <p>@Model.Language</p>
+            </div>
+
+            <div class="movie-info-card">
+                <strong>Duration</strong>
+                <p>@Model.Duration mins</p>
+            </div>
+
+            <div class="movie-info-card">
+                <strong>Genres</strong>
+                <p>@(Model.Genres != null && Model.Genres.Any() ? string.Join(", ", Model.Genres) : "N/A")</p>
+            </div>
+
+            <div class="movie-info-card">
+                <strong>Description</strong>
+                <p>@Model.Description</p>
+            </div>
+        </div>
+
+    </div>
+
+    <h3 class="mb-3">🎭 Theatres & Show</h3>
+    @if (Model.Theatres != null && Model.Theatres.Any())
+    {
+        <div class="accordion" id="theatreAccordion">
+            @for (int i = 0; i < Model.Theatres.Count; i++)
+            {
+                var theatre = Model.Theatres[i];
+                <div class="accordion-item mb-2">
+                    <h2 class="accordion-header" id="heading-@i">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-@i" aria-expanded="false" aria-controls="collapse-@i">
+                            🎬 @theatre.TheatreName (@theatre.City) – @theatre.Address
+                        </button>
+                    </h2>
+                    <div id="collapse-@i" class="accordion-collapse collapse" aria-labelledby="heading-@i" data-bs-parent="#theatreAccordion">
+                        <div class="accordion-body">
+                            @if (theatre.Screens != null && theatre.Screens.Any())
+                            {
+                                @foreach (var screen in theatre.Screens)
+                                {
+                                    <div class="card mb-3">
+                                        <div class="card-header">
+                                            <strong>Screen @screen.ScreenNo</strong> — Total Seats: @screen.TotalSeats
+                                        </div>
+                                        <div class="card-body">
+                                            @if (screen.ShowTimes != null && screen.ShowTimes.Any())
+                                            {
+                                                <table class="table table-bordered table-sm">
+                                                    <thead class="table-light">
+                                                        <tr>
+                                                            <th>Date</th>
+                                                            <th>Time</th>
+                                                            <th>Price</th>
+                                                            <th>Just do it!</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var show in screen.ShowTimes)
+                                                        {
+                                                            <tr>
+                                                                <td>@show.Date</td>
+                                                                <td>@show.Time</td>
+                                                                <td>₹@show.Price</td>
+                                                                <td>
+                                                                    <a asp-area="User" asp-controller="Booking" asp-action="Index"
+                                                                       asp-route-id="@show.ShowId"
+                                                                       class="btn btn-sm btn-primary">
+                                                                        Book Now
+                                                                    </a>
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            }
+                                            else
+                                            {
+                                                <p class="text-muted">No showtimes available for this screen.</p>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <p class="text-muted">No screens available for this theatre.</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">No theatres available for this movie.</div>
+    }
+</div>

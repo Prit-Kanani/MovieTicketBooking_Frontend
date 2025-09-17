@@ -1,0 +1,133 @@
+﻿/* Admin_AddUser.css */
+
+body {
+    background: #f4f4f9;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.admin-users-container {
+    display: flex;
+    flex-direction: column; /* stack title and form */
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 2rem;
+    gap: 1rem; /* optional spacing */
+}
+
+
+.user-form {
+    background-color: #fff;
+    padding: 2.5rem 3rem;
+    border-radius: 16px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    max-width: 700px;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+}
+
+    .user-form:hover {
+        box-shadow: 0 0 15px 3px rgba(128, 0, 128, 0.4);
+        transform: translateY(-4px);
+        z-index: 5;
+        border: 1px solid rgba(138, 43, 226, 0.5);
+    }
+
+.page-title {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #555;
+    transition: color 0.3s ease;
+}
+
+input.form-control,
+select.form-control {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+    transition: border 0.3s, box-shadow 0.3s;
+    background: #fafafa;
+}
+
+    input.form-control:focus,
+    input.form-control:hover,
+    select.form-control:focus,
+    select.form-control:hover {
+        border-color: #9b4dff;
+        box-shadow: 0 0 8px 2px rgba(155, 77, 255, 0.4);
+        background: #fff;
+    }
+
+.text-danger {
+    font-size: 0.9rem;
+    color: #e63946;
+    margin-top: 0.25rem;
+    display: block;
+}
+
+/* Buttons */
+.btn-primary {
+    background: #9b4dff;
+    color: white;
+    border: none;
+    font-weight: bold;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+    .btn-primary:hover {
+        background: #7d34e3;
+        transform: translateY(-2px);
+    }
+
+.btn-secondary {
+    background: #e0e0e0;
+    color: #333;
+    font-weight: bold;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+    .btn-secondary:hover {
+        background: #cccccc;
+        transform: translateY(-2px);
+    }
+
+/* Success & Error Messages */
+.success-message {
+    background: #d1fae5;
+    color: #065f46;
+    padding: 10px 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.error-message {
+    background: #fde2e2;
+    color: #b91c1c;
+    padding: 10px 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}

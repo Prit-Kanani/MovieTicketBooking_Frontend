@@ -1,0 +1,189 @@
+﻿.admin-users-container {
+    padding: 20px;
+    background: #f8f9fb;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.page-title {
+    font-size: 26px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.error-message {
+    background: #ffe5e5;
+    color: #d8000c;
+    padding: 10px 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.no-data {
+    font-size: 16px;
+    color: #777;
+    padding: 10px;
+    background: #fff;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.users-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+    .users-table thead {
+        background: #3b82f6;
+        color: white;
+    }
+
+    .users-table th, .users-table td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+    }
+
+    .users-table tbody tr:hover {
+        background: #f1f5ff;
+        transition: background 0.2s ease-in-out;
+    }
+
+/* Role Badge Styling */
+#roles {
+    margin-top: 10px; /* Align with other table cells */
+}
+.role-cell {
+    display: inline-flex; /* Keep content centered */
+    align-items: center;
+    justify-content: center;
+    min-width: 80px; /* Same width for all roles */
+    height: 28px; /* Fixed height */
+    padding: 0 10px; /* Horizontal padding only */
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 1;
+    text-transform: capitalize;
+    white-space: nowrap; /* Prevent wrapping */
+    box-sizing: border-box;
+}
+
+    /* Specific Role Colors */
+    .role-cell.admin {
+        background: #fde68a;
+        color: #92400e;
+    }
+
+    .role-cell.user {
+        background: #bbf7d0;
+        color: #065f46;
+    }
+
+
+.pagination-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 15px;
+    gap: 10px;
+}
+
+    .pagination-controls button {
+        padding: 6px 12px;
+        border: none;
+        background: #3b82f6;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+
+        .pagination-controls button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .pagination-controls button:hover:not(:disabled) {
+            background: #2563eb;
+        }
+
+#pageInfo {
+    font-size: 14px;
+    color: #333;
+}
+
+/* Action Buttons */
+.btn-action {
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 13px;
+    text-decoration: none;
+    color: white;
+    margin-right: 5px;
+}
+
+    .btn-action.edit {
+        background: #3b82f6;
+    }
+
+    .btn-action.delete {
+        background: #ef4444;
+    }
+
+    .btn-action.edit:hover {
+        background: #2563eb;
+    }
+
+    .btn-action.delete:hover {
+        background: #dc2626;
+    }
+
+/* Dropdown Styling */
+.filter-dropdown {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background-color: white;
+    font-size: 14px;
+    color: #333;
+    outline: none;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    min-width: 180px;
+}
+
+    .filter-dropdown:hover {
+        border-color: #3b82f6;
+    }
+
+    .filter-dropdown:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 2px rgba(59,130,246,0.2);
+    }
+
+/* To align with search inputs */
+.search-filter-container {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+
+    .search-filter-container input {
+        padding: 8px 12px;
+        border-radius: 6px;
+        border: 1px solid #ddd;
+        font-size: 14px;
+        outline: none;
+        transition: all 0.2s ease-in-out;
+    }
+
+        .search-filter-container input:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 2px rgba(59,130,246,0.2);
+        }

@@ -1,0 +1,49 @@
+﻿@model Movie_management_system.DTOs.UserAddDTO
+
+@{
+    ViewData["Title"] = "Add User";
+	Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    <link rel="stylesheet" href="~/css/Admin/Admin_AddUser.css" />
+
+}
+
+<div class="admin-users-container">
+    <h2 class="page-title">Add New User</h2>
+
+    <form asp-area="Admin" asp-controller="User" asp-action="AddUser" method="post" class="user-form">
+        <div class="form-group">
+            <label asp-for="Name"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Email"></label>
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Password"></label>
+            <input asp-for="Password" type="password" class="form-control" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Role"></label>
+            <select asp-for="Role" class="form-control">
+                <option value="">-- Select Role --</option>
+                <option value="Admin">Admin</option>
+                <option value="User">User</option>
+            </select>
+            <span asp-validation-for="Role" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Add User</button>
+        <a asp-area="Admin" asp-controller="User" asp-action="Index" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

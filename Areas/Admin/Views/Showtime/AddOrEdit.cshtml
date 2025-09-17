@@ -1,0 +1,70 @@
+﻿@model Movie_management_system.DTOs.ShowtimeAddDTO
+
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = (Model.ShowId == 0 || Model.ShowId == null) ? "Add Showtime" : "Edit Showtime";
+}
+
+@section Styles {
+    <link href="~/css/Admin/Admin_ShowtimeForm.css" rel="stylesheet" />
+}
+
+<div class="add-showtime-container">
+    <div class="add-showtime-form">
+        <h2>@ViewData["Title"]</h2>
+
+        <form asp-action="AddOrEdit" asp-controller="Showtime" asp-area="Admin" method="post">
+            <!-- Hidden field for Edit -->
+            <input asp-for="ShowId" type="hidden" />
+            <input asp-for="ScreenId" type="hidden" value="@Movie_management_system.Helper.Relation.ScreenId" />
+
+
+            <div class="form-group">
+                <label asp-for="MovieId">Movie</label>
+                <select asp-for="MovieId" class="form-control" asp-items="@(new SelectList(ViewBag.Movies, "MovieId", "Name"))">
+                    <option value="">-- Select Movie --</option>
+                </select>
+                <span asp-validation-for="MovieId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Date">Date</label>
+                <input asp-for="Date" class="form-control" type="date"
+                       min="@DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")" />
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Time">Time</label>
+                <input asp-for="Time" class="form-control" type="time" />
+                <span asp-validation-for="Time" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="Price">Price</label>
+                <input asp-for="Price"
+                       class="form-control"
+                       type="number"
+                       min="0"
+                       step="1"
+                       placeholder="Enter Price"
+                       oninput="this.value = Math.abs(this.value)" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+
+
+
+            <div class="form-buttons">
+                <button type="submit" class="btn-submit">@ViewData["Title"]</button>
+                <a asp-area="Admin" asp-controller="Showtime" asp-action="Index" asp-route-id="@Movie_management_system.Helper.Relation.ScreenId" class="btn-cancel">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

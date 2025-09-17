@@ -1,0 +1,220 @@
+﻿/* movieSlider.css - adjusted: much taller viewport, smaller poster visual size */
+
+/* wrapper: centered & constrained to previous good width */
+.movie-slider-wrapper {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    position: relative;
+}
+
+/* viewport: made significantly taller */
+.movie-slider-viewport {
+    width: 100%;
+    /* increased height to make the box very big while staying responsive */
+    height: clamp(620px, 68vh, 920px);
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+    position: relative;
+    background: linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.04));
+}
+
+/* track */
+.movie-slider {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.7s cubic-bezier(.22,.9,.31,1);
+    align-items: center;
+}
+
+/* each slide occupies full viewport width (no overlap) */
+.movie-slide {
+    flex: 0 0 100%;
+    height: 100%;
+    position: relative;
+    user-select: none;
+    -webkit-user-drag: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* poster frame: centers the image and provides neutral background for letterboxing */
+.movie-poster-frame {
+    width: 42%; /* current visual size inside the larger viewport */
+    height: 68%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 10px;
+    background: #000; /* makes letterbox/pillarbox areas look clean */
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+
+/* poster image: contain so full image is visible, maintain aspect ratio, no stretching */
+.movie-poster {
+    display: block;
+    width: auto; /* let image determine width */
+    height: 100%; /* fill the frame height but scale proportionally */
+    max-width: 100%; /* never overflow frame width */
+    max-height: 100%; /* never overflow frame height */
+    object-fit: contain; /* crucial: preserve aspect ratio and show whole image */
+    transition: transform 300ms ease;
+    -webkit-user-drag: none;
+    user-select: none;
+}
+
+/* subtle zoom on hover — still preserves aspect ratio */
+.movie-slide:hover .movie-poster {
+    transform: scale(1.02);
+}
+
+
+/* movie title pill (visible) */
+.movie-title-pill {
+    position: absolute;
+    left: 18px;
+    bottom: 18px;
+    background: rgba(0,0,0,0.55);
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 999px;
+    font-weight: 700;
+    z-index: 6;
+    backdrop-filter: blur(4px);
+    max-width: calc(100% - 220px);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+/* booking button hidden by default; appears on hover */
+.btn-book {
+    position: absolute;
+    right: 18px;
+    bottom: 18px;
+    z-index: 7;
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+    transition: opacity 260ms ease, transform 260ms ease, box-shadow 260ms ease;
+    border-radius: 28px;
+    padding: 10px 16px;
+    font-weight: 700;
+    background: linear-gradient(90deg,#ff4c4c,#ff7a4c);
+    color: #fff;
+    border: none;
+    box-shadow: 0 8px 22px rgba(255,76,76,0.18);
+}
+
+.movie-slider-viewport:hover .btn-book,
+.movie-slide:hover .btn-book {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+/* arrows: absolute overlay inside viewport */
+.slider-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.45);
+    color: #fff;
+    border: none;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.25);
+    transition: transform 150ms ease, background 150ms ease;
+    z-index: 12;
+    backdrop-filter: blur(4px);
+}
+
+.slider-prev {
+    left: 12px;
+}
+
+.slider-next {
+    right: 12px;
+}
+
+.slider-arrow:hover {
+    transform: translateY(-50%) scale(1.03);
+    background: rgba(0,0,0,0.65);
+}
+
+/* dots: placed at bottom-center inside viewport */
+.movie-dots {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 10px;
+    display: flex;
+    gap: 8px;
+    z-index: 11;
+    pointer-events: auto;
+}
+
+    .movie-dots .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #000;
+        border: none;
+        transition: all 300ms ease;
+        cursor: pointer;
+        padding: 0;
+        opacity: 0.8;
+    }
+
+        .movie-dots .dot.active {
+            transform: scale(1.35);
+            background: #ffffff;
+            opacity: 1;
+        }
+
+/* hide arrows/dots if only one slide - graceful */
+.movie-slider-wrapper.single .slider-arrow,
+.movie-slider-wrapper.single .movie-dots {
+    display: none;
+}
+
+/* responsive tweaks */
+@media (max-width: 576px) {
+    /* on very small screens, make poster slightly larger so it's still visible */
+    .movie-poster-frame {
+        width: 72%;
+        height: 70%;
+    }
+
+    .movie-title-pill {
+        left: 12px;
+        bottom: 12px;
+        font-size: 0.95rem;
+        padding: 6px 10px;
+    }
+
+    .btn-book {
+        right: 12px;
+        bottom: 12px;
+        padding: 8px 12px;
+        font-size: 0.9rem;
+    }
+
+    .slider-arrow {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+        left: 8px;
+        right: 8px;
+    }
+}

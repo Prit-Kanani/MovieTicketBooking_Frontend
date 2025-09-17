@@ -1,0 +1,130 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin Panel | Movie Management</title>
+
+    <link rel="icon" type="image/png" href="~/images/Movie_Mine.png" />
+    <meta name="description" content="Movie Mine - A sleek and fast movie ticket booking platform for all your cinema needs." />
+    <meta name="author" content="Prit Kanani" />
+    <meta name="keywords" content="movie, booking, cinema, ticket, showtime, MovieMine, Theatre" />
+
+    <!-- Base Styles -->
+    <link href="~/css/Admin/Admin_Layout.css" rel="stylesheet" />
+    <link href="~/css/ToastMessage.css" rel="stylesheet" />
+    <link href="~/css/Admin/navbar-dropdown.css" rel="stylesheet" />
+    @RenderSection("Styles", required: false)
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-dark bg-dark px-3 mb-0">
+        <a class="navbar-brand fw-bold text-white" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">🎬 MovieMine</a>
+
+        <!-- Top Dropdowns -->
+        <div class="ms-auto d-flex align-items-center">
+            <!-- Movies Dropdown -->
+            <div class="dropdown me-2">
+                <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    🎬 Movies
+                </button>
+                <ul class="dropdown-menu dropdown-menu-dark">
+                    <li><a class="dropdown-item" asp-area="Admin" asp-controller="Movie" asp-action="Index">All Movies</a></li>
+                    <li><a class="dropdown-item" asp-area="Admin" asp-controller="Movie" asp-action="AddMovie">Add Movie</a></li>
+                </ul>
+            </div>
+
+            <!-- Theaters Dropdown -->
+            <div class="dropdown me-2">
+                <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    🏛️ Theaters
+                </button>
+                <ul class="dropdown-menu dropdown-menu-dark">
+                    <li><a class="dropdown-item" asp-area="Admin" asp-controller="Theatre" asp-action="Index">All Theaters</a></li>
+                    <li><a class="dropdown-item" asp-area="Admin" asp-controller="Theatre" asp-action="AddOrEdit">Add Theater</a></li>
+                </ul>
+            </div>
+
+            <!-- Users Dropdown -->
+            <div class="dropdown me-2">
+                <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    😁 Users
+                </button>
+                <ul class="dropdown-menu dropdown-menu-dark">
+                    <li><a class="dropdown-item" asp-area="Admin" asp-controller="User" asp-action="Index">All Users</a></li>
+                    <li><a class="dropdown-item" asp-area="Admin" asp-controller="User" asp-action="AddUser">Add User</a></li>
+                </ul>
+            </div>
+
+            <!-- Genres Dropdown -->
+            <div class="dropdown me-2">
+                <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-hash me-1"></i> Genres
+                </button>
+                <ul class="dropdown-menu dropdown-menu-dark">
+                    <li><a class="dropdown-item" asp-area="Admin" asp-controller="Genre" asp-action="Pagination">All Genres</a></li>
+                    <li><a class="dropdown-item" asp-area="Admin" asp-controller="Genre" asp-action="AddOrEditGenre">Add Genre</a></li>
+                </ul>
+            </div>
+
+            <!-- User Menu -->
+            <div class="dropdown">
+                <button id="userMenuBtn"
+                        class="btn btn-dark dropdown-toggle"
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        data-bs-display="static"
+                        aria-expanded="false">
+                    ⭐ Admin
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark" aria-labelledby="userMenuBtn">
+                    <li><a class="dropdown-item" asp-area="Admin" asp-controller="User" asp-action="EditUser">Edit Profile</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" asp-area="Admin" asp-controller="Dashboard" asp-action="Logout">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div id="adminLayoutContainer" class="d-flex">
+        <div class="main-content flex-grow-1">
+            <main class="bg-light min-vh-100">
+                <div class="container-fluid px-4 py-4">
+                    @RenderBody()
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Toasts -->
+    @if (TempData.Peek("Success") != null || TempData.Peek("Error") != null)
+    {
+        <div class="toast-container">
+            @if (TempData.Peek("Success") != null)
+            {
+                <div class="toast-message toast-success">
+                    @TempData["Success"]
+                    <button onclick="this.parentElement.style.display='none'">✖</button>
+                </div>
+            }
+            @if (TempData.Peek("Error") != null)
+            {
+                <div class="toast-message toast-error">
+                    @TempData["Error"]
+                    <button onclick="this.parentElement.style.display='none'">✖</button>
+                </div>
+            }
+        </div>
+    }
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,30 @@
+﻿/* ===== Genre Table Styling ===== */
+.genre-container {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    margin: 2rem auto;
+}
+
+.page-title {
+    font-weight: 700;
+    color: #343a40;
+    margin: 0;
+}
+
+/* Table */
+.genre-table {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+    .genre-table th, .genre-table td {
+        vertical-align: middle;
+    }
+
+    .genre-table .btn {
+        border-radius: 6px;
+        font-weight: 500;
+        padding: 0.35rem 0.75rem;
+    }

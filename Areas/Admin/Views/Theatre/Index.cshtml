@@ -1,0 +1,156 @@
+﻿@model List<Movie_management_system.Models.Theatre>
+@{
+    ViewBag.Title = "Theatre List";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Admin/theatre-index.css" />
+}
+
+<div class="container mt-4">
+    <h2>@ViewBag.Title</h2>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="d-flex align-items-center">
+            <input type="text" id="searchInput" class="form-control" placeholder="Search by name..." />
+        </div>
+
+        <div class="action-btns">
+            <a asp-area="Admin" asp-controller="Theatre" asp-action="AddOrEdit" class="btn btn-primary" id="addBtn">Add Theatre</a>
+            <button class="btn btn-danger" id="deleteToggleBtn">Delete</button>
+            <button class="btn btn-secondary hidden-checkbox" id="cancelBtn">Cancel</button>
+        </div>
+    </div>
+
+    <form id="theatreForm">
+        <table class="table table-bordered table-hover" id="theatreTable">
+            <thead class="table-dark">
+                <tr>
+                    <th class="hidden-checkbox">Select</th>
+                    <th>Name</th>
+                    <th>City</th>
+                    <th>Address</th>
+                    <th>Screens</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var theatre in ViewBag.Theatres as List<Movie_management_system.Models.Theatre>)
+                {
+                    <tr>
+                        <td class="hidden-checkbox">
+                            <input type="checkbox" class="selectBox" value="@theatre.TheatreId" />
+                        </td>
+                        <td>@theatre.Name</td>
+                        <td>@theatre.City</td>
+                        <td>@theatre.Address</td>
+                        <td>@theatre.Screens.Count</td>
+                        <td>
+                            <a asp-area="Admin" asp-controller="Theatre" asp-action="AddOrEdit" asp-route-theatreId="@theatre.TheatreId" class="btn btn-sm btn-warning"> Edit </a>
+                            <a asp-area="Admin" asp-controller="Screen" asp-action="Index" asp-route-theatreId="@theatre.TheatreId" class="btn btn-sm btn-info"> Details </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        const searchInput = document.getElementById("searchInput");
+        const deleteBtn = document.getElementById("deleteToggleBtn");
+        const cancelBtn = document.getElementById("cancelBtn");
+        const checkboxes = document.querySelectorAll(".selectBox");
+        const checkboxColumn = document.querySelectorAll(".hidden-checkbox");
+
+        // Hide cancel button and checkboxes on initial load
+        window.addEventListener("DOMContentLoaded", () => {
+            cancelBtn.style.display = "none";
+            checkboxColumn.forEach(col => col.style.display = "none");
+        });
+
+        // Live Search
+        searchInput.addEventListener("keyup", function () {
+            let filter = searchInput.value.toLowerCase();
+            let rows = document.querySelectorAll("#theatreTable tbody tr");
+
+            rows.forEach(row => {
+                let name = row.cells[1].innerText.toLowerCase(); // Name column
+                row.style.display = name.includes(filter) ? "" : "none";
+            });
+        });
+
+        // Toggle Delete Mode
+        deleteBtn.addEventListener("click", async () => {
+            const selectedIds = Array.from(checkboxes)
+                .filter(cb => cb.checked)
+                .map(cb => parseInt(cb.value));
+
+            if (selectedIds.length === 0) {
+                // Show checkboxes and cancel button if no selection
+                checkboxColumn.forEach(col => col.style.display = "table-cell");
+                cancelBtn.style.display = "inline-block";
+                showToast("Please select items to delete!");
+                return;
+            }
+
+            try {
+                const response = await fetch('/Admin/Theatre/Delete', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(selectedIds)
+                });
+
+                if (response.ok) {
+                    showToast("Theatre(s) deleted successfully!");
+                    window.location.reload();
+                } else {
+                    showToast("Failed to delete theatres.");
+                }
+            } catch (err) {
+                console.error(err);
+                showToast("Error deleting theatres.");
+            }
+        });
+
+        // Cancel Delete Mode
+        cancelBtn.addEventListener("click", () => {
+            window.location.reload(); // Reset everything
+        });
+
+        // Optional: store selected IDs
+        checkboxes.forEach(box => {
+            box.addEventListener("change", () => {
+                const selectedIds = Array.from(checkboxes)
+                    .filter(cb => cb.checked)
+                    .map(cb => parseInt(cb.value));
+                console.log("Selected IDs:", selectedIds);
+            });
+        });
+
+        // Simple toast function
+        function showToast(message) {
+            let toast = document.createElement("div");
+            toast.innerText = message;
+            toast.style.position = "fixed";
+            toast.style.bottom = "20px";
+            toast.style.right = "20px";
+            toast.style.backgroundColor = "#333";
+            toast.style.color = "#fff";
+            toast.style.padding = "10px 20px";
+            toast.style.borderRadius = "5px";
+            toast.style.zIndex = 1000;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+    </script>
+}
+
+

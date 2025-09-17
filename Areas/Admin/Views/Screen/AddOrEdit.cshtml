@@ -1,0 +1,54 @@
+﻿@model Movie_management_system.DTOs.ScreenAddDTO
+
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = (Model.ScreenId == null  || Model.ScreenId == 0) ? "Add Screen" : "Edit Screen";
+}
+
+@section Styles {
+    <link href="~/css/Admin/Admin_ScreenForm.css" rel="stylesheet" />
+}
+
+<div class="add-screen-container">
+    <div class="add-screen-form">
+        <h2>@ViewData["Title"]</h2>
+
+        <form asp-action="AddOrEdit" asp-controller="Screen" asp-area="Admin" method="post">
+            <!-- Hidden field for Edit -->
+            <input asp-for="ScreenId" type="hidden" />
+
+            <input asp-for="TheatreId" type="hidden" value="@Model.TheatreId" />
+
+            <div class="form-group">
+                <label asp-for="ScreenNo">Screen Number</label>
+                <input asp-for="ScreenNo" class="form-control" type="number" min="1" max="50"
+                       oninput="this.value = this.value.replace(/[^0-9]/g, '');
+                       if (this.value> 150) this.value = 50;"
+                       placeholder="Enter Seat no. (max 50)" />
+                <span asp-validation-for="ScreenNo" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="TotalSeats">Total Seats</label>
+                <input asp-for="TotalSeats" class="form-control" type="number" min="1" max="150"
+                       oninput="this.value = this.value.replace(/[^0-9]/g, '');
+                       if (this.value> 150) this.value = 150;"
+                placeholder="Enter total seats (max 150)" />
+                <span asp-validation-for="TotalSeats" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-buttons">
+                <button type="submit" class="btn-submit">@ViewData["Title"]</button>
+                <a asp-area="Admin" asp-controller="Screen" asp-action="Index" asp-route-theatreId="@Model.TheatreId" class="btn-cancel">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

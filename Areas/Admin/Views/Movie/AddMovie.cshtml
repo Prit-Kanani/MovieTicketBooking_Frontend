@@ -1,0 +1,91 @@
+﻿@model Movie_management_system.Models.Movie
+
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = (Model.MovieId == null || Model.MovieId == 0) ? "Add Movie" : "Edit Movie";
+
+    var genres = ViewBag.Genres as List<Movie_management_system.Models.Genre> ?? new List<Movie_management_system.Models.Genre>();
+    var selectedGenres = Model?.Genres ?? new List<Genre>();
+}
+
+@section Styles {
+    <link href="~/css/Admin/Admin_AddMovie.css" rel="stylesheet" />
+}
+
+<div class="add-movie-container">
+    <div class="add-movie-form">
+        <h2>@ViewData["Title"]</h2>
+
+        <form asp-area="Admin" asp-controller="Movie" asp-action="AddMovie" method="post" enctype="multipart/form-data">
+            <!-- Hidden ID field for Edit -->
+            <input asp-for="MovieId" type="hidden" />
+
+            <div class="form-group">
+                <label asp-for="Name">Title</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Language">Language</label>
+                <input asp-for="Language" class="form-control" />
+                <span asp-validation-for="Language" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Duration">Duration (in minutes)</label>
+                <input asp-for="Duration" class="form-control no-spinner" type="number" min="1" max="1440" oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
+                <small class="form-text text-muted">Must be between 1 and 1440 minutes.</small>
+                <span asp-validation-for="Duration" class="text-danger"></span>
+            </div>
+
+            <!-- Existing Poster filename (Edit mode only) -->
+            @if (!string.IsNullOrEmpty(Model.Poster))
+            {
+                <div class="form-group">
+                    <label>Current Poster:</label>
+                    <p>@Model.Poster</p>
+                </div>
+            }
+
+            <div class="form-group">
+                <label asp-for="PosterFile">Upload Poster</label>
+                <input asp-for="PosterFile" type="file" class="form-control" accept=".jpg,.jpeg,.png" />
+                <span asp-validation-for="PosterFile" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Description">Description</label>
+                <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <!-- Genre Checkboxes -->
+            <div class="form-group">
+                <label>Genres</label>
+                <div class="genre-checkbox-group">
+                    @foreach (var genre in genres)
+                    {
+                        <div class="genre-checkbox">
+                            <input type="checkbox" name="GenreIds" value="@genre.GenreId"
+                                   @(Model.GenreIds != null && Model.GenreIds.Contains(genre.GenreId) ? "checked" : "") />
+                            <label>@genre.Name</label>
+                        </div>
+                    }
+                </div>
+                <span asp-validation-for="GenreIds" class="text-danger"></span>
+            </div>
+
+            <div class="form-buttons">
+                <button type="submit" class="btn-submit">
+                    @ViewData["Title"]
+                </button>
+                <a asp-action="AddMovie" asp-controller="Movie" asp-area="Admin" class="btn-cancel">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

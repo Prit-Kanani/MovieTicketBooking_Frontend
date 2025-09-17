@@ -1,0 +1,75 @@
+﻿@model Movie_management_system.Models.RegisterViewModel
+@{
+    Layout = "_LoginLayout";
+}
+
+@section Styles {
+    <link href="~/css/login.css" rel="stylesheet" />
+}
+
+<div class="login-bg">
+    <div class="login-card">
+        <div class="logo">Movie Mine</div>
+        <div class="subtitle">Sign Up</div>
+
+        <form asp-action="Index" asp-controller="Register" method="post" class="needs-validation w-100" novalidate>
+            @Html.AntiForgeryToken()
+
+            <!-- Name -->
+            <div class="input-container">
+                <input asp-for="Name"
+                       class="styled_input_bar"
+                       placeholder="Full Name"
+                       id="register-name" />
+                <label class="input-label" for="register-name">Full Name</label>
+            </div>
+            <span asp-validation-for="Name" class="text-danger d-block text-center"></span>
+
+            <!-- Email -->
+            <div class="input-container">
+                <input asp-for="Email"
+                       class="styled_input_bar"
+                       placeholder="Email"
+                       id="register-email" />
+                <label class="input-label" for="register-email">Email</label>
+            </div>
+            <span asp-validation-for="Email" class="text-danger d-block text-center"></span>
+
+            <!-- Password -->
+            <div class="input-container">
+                <input asp-for="Password"
+                       class="styled_input_bar"
+                       type="password"
+                       placeholder=" "
+                       id="register-password" />
+                <label class="input-label" for="register-password">Password (min 6 chars)</label>
+            </div>
+            <span asp-validation-for="Password" class="text-danger d-block text-center"></span>
+
+            <!-- Confirm Password -->
+            <div class="input-container">
+                <input asp-for="ConfirmPassword"
+                       class="styled_input_bar"
+                       type="password"
+                       placeholder=" "
+                       id="register-confirm" />
+                <label class="input-label" for="register-confirm">Confirm Password</label>
+            </div>
+            <span asp-validation-for="ConfirmPassword" class="text-danger d-block text-center"></span>
+
+            <!-- Buttons -->
+            <div class="d-flex justify-content-center mt-3">
+                <button type="submit" class="btn btn-custom" data-glitch=" Sign_Up">Sign Up</button>
+                <button type="button" class="btn btn-custom" data-glitch=" Cancel" onclick="window.location.href='@Url.Action("Index", "Register")'">Cancel</button>
+            </div>
+
+        </form>
+
+
+        <!-- Redirect Link -->
+        <p class="mt-4 text-center small" style="color:#bbb;">
+            Already have an account?
+            <a asp-controller="Login" asp-action="Index">Sign in here</a>
+        </p>
+    </div>
+</div>

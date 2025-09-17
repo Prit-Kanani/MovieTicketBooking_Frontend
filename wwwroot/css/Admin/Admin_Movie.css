@@ -1,0 +1,54 @@
+﻿@import url('https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css');
+.card-img-top {
+    height: 250px;
+    object-fit: cover;
+    border-bottom: 1px solid #ddd;
+}
+
+.card-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.card-text {
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+#searchFilters input,
+#searchFilters select {
+    border-radius: 8px;
+    padding: 0.6rem 1rem;
+}
+
+#searchFilters select {
+    min-width: 150px;
+}
+
+#movieContainer .card {
+    transition: transform 0.2s ease;
+}
+
+#movieContainer .card:hover {
+    transform: scale(1.02);
+}
+.btn-add-movie {
+    background: linear-gradient(135deg, #00c6ff, #0072ff);
+    color: #fff;
+    font-weight: 600;
+    padding: 12px 26px;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    display: inline-block;
+    font-size: 16px;
+}
+
+.btn-add-movie:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 14px 30px rgba(0, 114, 255, 0.5);
+    background: linear-gradient(135deg, #0072ff, #00c6ff);
+}
+
+

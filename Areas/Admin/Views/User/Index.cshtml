@@ -1,0 +1,80 @@
+﻿@{
+    ViewBag.Title = "Users Management";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    var users = ViewBag.Users as List<Movie_management_system.DTOs.UserDTO>;
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Admin/admin-users.css" />
+}
+@section Scripts {
+    <script src="~/js/Admin_User.js"></script>
+}
+
+
+<div class="admin-users-container">
+    <h1 class="page-title">Users Management</h1>
+
+    @if (users == null || !users.Any())
+    {
+        <div class="no-data">No users found.</div>
+    }
+    else
+    {
+        <div class="search-filter-container">
+            <input type="text" id="searchByName" placeholder="Search by Name" />
+            <input type="text" id="searchByEmail" placeholder="Search by Email" />
+
+            <select id="searchByRole" class="filter-dropdown">
+                <option value="">-- Select Role --</option>
+                <option value="Admin">Admin</option>
+                <option value="User">User</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <a asp-action="AddUser" asp-controller="User" asp-area="Admin" class="btn btn-primary">+ Add User</a>
+        </div>
+
+        <table class="users-table" id="usersTable">
+            <thead>
+                <tr>
+                    <th>Sr No.</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Bookings</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="usersTableBody">
+                @for (int i = 0; i < users.Count; i++)
+                {
+                    <tr>
+                        <td>@(i + 1)</td>
+                        <td>@users[i].Name</td>
+                        <td>@users[i].Email</td>
+                        <td class="role-cell @(users[i].Role.ToLower())">@users[i].Role</td>
+                        <td>@users[i].BookingCount</td>
+                        <td>
+                            <a asp-action="DeleteUser"
+                               asp-controller="User"
+                               asp-area="Admin"
+                               asp-route-id="@users[i].UserId"
+                               class="btn-action delete"
+                               onclick="return confirm('Are you sure you want to delete this user?');">
+                                Delete
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="pagination-controls">
+            <button id="prevPage" disabled>Prev</button>
+            <span id="pageInfo"></span>
+            <button id="nextPage">Next</button>
+        </div>
+    }
+</div>

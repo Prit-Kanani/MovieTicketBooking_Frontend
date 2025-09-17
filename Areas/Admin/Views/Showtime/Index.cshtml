@@ -1,0 +1,172 @@
+﻿@model List<Movie_management_system.DTOs.ShowtimeDTO>
+@{
+    ViewBag.Title = "Show List";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Admin/Admin_ShowTime.css" />
+    <link rel="stylesheet" href="~/css/Admin/Admin_button.css" />
+}
+
+<div class="container mt-4">
+    <div class="mb-3">
+        <!-- Animated Back Button -->
+        <a asp-area="Admin" asp-controller="Screen" asp-action="Index" asp-route-theatreId="@Movie_management_system.Helper.Relation.TheatreId" class="btn-go-back">
+            <div class="bar">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+                    <path d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z"></path>
+                    <path d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z"></path>
+                </svg>
+            </div>
+            <span class="btn-text">Go Back</span>
+        </a>
+    </div>
+
+    <h2>@ViewBag.Title</h2>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="d-flex align-items-center">
+            <input type="text" id="searchInput" class="form-control" placeholder="Search by Movie name..." />
+        </div>
+
+        <div class="action-btns">
+            <a asp-area="Admin" asp-controller="ShowTime" asp-action="AddOrEdit" class="btn btn-primary" id="addBtn">Add Show</a>
+            <button class="btn btn-danger" id="deleteToggleBtn">Delete</button>
+            <button class="btn btn-secondary hidden-checkbox" id="cancelBtn">Cancel</button>
+        </div>
+    </div>
+
+    <form id="showtimeForm">
+        <table class="table table-bordered table-hover" id="showtimeTable">
+            <thead class="table-dark">
+                <tr>
+                    <th class="hidden-checkbox">Select</th>
+                    <th>S.No</th>
+                    <th>Movie</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Price</th>
+                    <th>Bookings</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                    var show = Model[i];
+                    <tr>
+                        <td class="hidden-checkbox">
+                            <input type="checkbox" class="selectBox" value="@show.ShowId" />
+                        </td>
+                        <td class="serialNo">@show.ShowId</td> <!-- JS will insert serial number -->
+                        <td>@show.MovieName</td>
+                        <td>@show.Date</td>
+                        <td>@show.Time</td>
+                        <td>@show.Price</td>
+                        <td>@show.BookingsCount</td>
+                        <td>
+                            <a asp-area="Admin" asp-controller="ShowTime" asp-action="AddOrEdit" asp-route-id="@show.ShowId" class="btn btn-sm btn-warning">Edit</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        const searchInput = document.getElementById("searchInput");
+        const deleteBtn = document.getElementById("deleteToggleBtn");
+        const cancelBtn = document.getElementById("cancelBtn");
+        const checkboxes = document.querySelectorAll(".selectBox");
+        const checkboxColumn = document.querySelectorAll(".hidden-checkbox");
+
+        window.addEventListener("DOMContentLoaded", () => {
+            cancelBtn.style.display = "none";
+            checkboxColumn.forEach(col => col.style.display = "none");
+
+            // Serial numbers
+            updateSerialNumbers();
+        });
+
+        // Search by Movie name
+        searchInput.addEventListener("keyup", function () {
+            let filter = searchInput.value.toLowerCase();
+            let rows = document.querySelectorAll("#showtimeTable tbody tr");
+
+            rows.forEach(row => {
+                let movieName = row.cells[2].innerText.toLowerCase();
+                row.style.display = movieName.includes(filter) ? "" : "none";
+            });
+
+            updateSerialNumbers();
+        });
+
+                let deleteMode = false;
+
+        deleteBtn.addEventListener("click", async () => {
+            const selectedIds = Array.from(checkboxes)
+                .filter(cb => cb.checked)
+                .map(cb => parseInt(cb.value));
+
+            // First click → just enable delete mode
+            if (!deleteMode) {
+                checkboxColumn.forEach(col => col.style.display = "table-cell");
+                cancelBtn.style.display = "inline-block";
+                deleteMode = true;
+                showToast("Select showtimes to delete.");
+                return;
+            }
+
+            // If still nothing selected on second click
+            if (selectedIds.length === 0) {
+                showToast("No showtimes selected!");
+                return;
+            }
+
+            try {
+                const response = await fetch('/Admin/ShowTime/DeleteShowTimes', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(selectedIds)
+                });
+
+                if (response.status === 200) {
+                    showToast("All selected showtimes deleted successfully!");
+                    window.location.reload();
+                } else if (response.status === 206) {
+                    showToast("Some showtimes deleted, some not found.");
+                    window.location.reload();
+                } else if (response.status === 404) {
+                    showToast("No active showtimes found for given IDs.");
+                } else {
+                    showToast("Failed to delete showtimes.");
+                }
+            } catch (err) {
+                console.error(err);
+                showToast("Error deleting showtimes.");
+            }
+        });
+
+
+        cancelBtn.addEventListener("click", () => window.location.reload());
+
+        function showToast(message) {
+            let toast = document.createElement("div");
+            toast.innerText = message;
+            toast.style.position = "fixed";
+            toast.style.bottom = "20px";
+            toast.style.right = "20px";
+            toast.style.backgroundColor = "#333";
+            toast.style.color = "#fff";
+            toast.style.padding = "10px 20px";
+            toast.style.borderRadius = "5px";
+            toast.style.zIndex = 1000;
+            document.body.appendChild(toast);
+
+            setTimeout(() => toast.remove(), 3000);
+        }
+    </script>
+}

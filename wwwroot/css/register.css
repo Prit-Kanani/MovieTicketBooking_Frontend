@@ -1,0 +1,43 @@
+﻿.input-container {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+
+.styled_input_bar {
+    width: 100%;
+    padding: 12px;
+    background: #222;
+    border: none;
+    border-bottom: 2px solid #666;
+    color: #fff;
+    outline: none;
+}
+
+.input-label {
+    position: absolute;
+    left: 12px;
+    top: 12px;
+    color: #aaa;
+    transition: all 0.3s ease;
+}
+
+.styled_input_bar:focus + .input-label,
+.styled_input_bar:not(:placeholder-shown) + .input-label {
+    top: -10px;
+    font-size: 12px;
+    color: #0ff;
+}
+
+.btn-custom {
+    background: #e50914;
+    color: white;
+    padding: 10px 20px;
+    margin: 0 0.5rem;
+    border: none;
+    border-radius: 6px;
+    transition: background 0.3s;
+}
+
+    .btn-custom:hover {
+        background: #f40612;
+    }

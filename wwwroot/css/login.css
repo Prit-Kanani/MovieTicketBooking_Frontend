@@ -1,0 +1,227 @@
+﻿/* Base & Body */
+body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', 'Arial', sans-serif;
+    background: linear-gradient(120deg, #141414 0%, #232323 100%);
+    min-height: 100vh;
+}
+
+/* Login Background Overlay */
+.login-bg {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(20, 20, 20, 0.6);
+}
+
+/* Login Card */
+.login-card {
+    background: rgba(20, 20, 20, 0.95);
+    padding: 2.5rem 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.7);
+    color: #fff;
+    max-width: 400px;
+    width: 100%;
+    transition: box-shadow 0.3s;
+    border-top: 4px solid #e50914;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+    .login-card:hover {
+        box-shadow: 0 0 60px 0 #e5091433;
+    }
+
+/* Logo */
+.logo {
+    font-size: 2.2rem;
+    font-weight: bold;
+    color: #e50914;
+    text-align: center;
+    margin-bottom: 1rem;
+    letter-spacing: 2px;
+    font-family: 'Segoe UI', 'Arial Black', sans-serif;
+    text-shadow: 2px 2px 8px #000a;
+}
+
+/* Subtitle */
+.subtitle {
+    font-size: 1.1rem;
+    font-weight: 500;
+    text-align: center;
+    color: #ffffffcc;
+    margin-bottom: 1.5rem;
+}
+
+/* ===========================
+   Floating Label Input Fields
+   =========================== */
+.input-container {
+    position: relative;
+    width: 90%;
+    margin: 0 auto 1.5rem auto;
+}
+
+.styled_input_bar {
+    width: 110%;
+    padding: 1em;
+    font-size: 1em;
+    border: 0.1em solid grey;
+    border-radius: 2em;
+    background-color: transparent;
+    color: white;
+    outline: none;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    margin-left: -5%;
+}
+
+    .styled_input_bar::placeholder {
+        color: transparent;
+        transition: all 0.3s ease;
+    }
+
+    .styled_input_bar:focus {
+        border-color: white;
+    }
+
+.input-label {
+    position: absolute;
+    left: 1.5em;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1em;
+    color: grey;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    background-color: #141414;
+    padding: 0 0.5em;
+}
+
+.styled_input_bar:focus + .input-label,
+.styled_input_bar:not(:placeholder-shown) + .input-label {
+    top: 0;
+    font-size: 0.8em;
+    color: white;
+}
+
+/* =======================
+   Buttons (Glitch Effect)
+   ======================= */
+.btn-custom,
+.btn-custom::after {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    background: linear-gradient(45deg, transparent 5%, #ff013c 5%);
+    border: none;
+    color: #fff;
+    letter-spacing: 1px;
+    line-height: 1;
+    box-shadow: 3px 0px 0px #00e6f6;
+    outline: transparent;
+    position: relative;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    width: fit-content;
+    transition: transform 0.2s ease;
+    margin: 0 10px;
+}
+
+    .btn-custom::after {
+        --slice-0: inset(50% 50% 50% 50%);
+        --slice-1: inset(80% -6px 0 0);
+        --slice-2: inset(50% -6px 30% 0);
+        --slice-3: inset(10% -6px 85% 0);
+        --slice-4: inset(40% -6px 43% 0);
+        --slice-5: inset(80% -6px 5% 0);
+        content: attr(data-glitch);
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(45deg, transparent 3%, #00e6f6 3%, #00e6f6 5%, #ff013c 5%);
+        text-shadow: -2px -2px 0px #f8f005, 2px 2px 0px #00e6f6;
+        clip-path: var(--slice-0);
+        pointer-events: none;
+    }
+
+    .btn-custom:hover::after {
+        animation: glitch 1s steps(2, end);
+    }
+
+@keyframes glitch {
+    0% {
+        clip-path: var(--slice-1);
+        transform: translate(-2px, -2px);
+    }
+
+    10% {
+        clip-path: var(--slice-3);
+        transform: translate(2px, 2px);
+    }
+
+    20% {
+        clip-path: var(--slice-1);
+        transform: translate(-1px, 2px);
+    }
+
+    30% {
+        clip-path: var(--slice-3);
+        transform: translate(0px, 1px);
+    }
+
+    40% {
+        clip-path: var(--slice-2);
+        transform: translate(-1px, 0px);
+    }
+
+    50% {
+        clip-path: var(--slice-3);
+        transform: translate(1px, 0px);
+    }
+
+    60% {
+        clip-path: var(--slice-4);
+        transform: translate(1px, 2px);
+    }
+
+    70% {
+        clip-path: var(--slice-2);
+        transform: translate(-2px, 2px);
+    }
+
+    80% {
+        clip-path: var(--slice-5);
+        transform: translate(2px, -2px);
+    }
+
+    90% {
+        clip-path: var(--slice-1);
+        transform: translate(-2px, 0px);
+    }
+
+    100% {
+        clip-path: var(--slice-1);
+        transform: translate(0);
+    }
+}
+
+/* Links */
+a {
+    color: #e50914;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+    a:hover {
+        color: #fff;
+        text-decoration: underline;
+    }

@@ -1,0 +1,80 @@
+﻿.add-showtime-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+}
+
+.add-showtime-form {
+    background: #fff;
+    padding: 2rem 3rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 500px;
+}
+
+    .add-showtime-form h2 {
+        margin-bottom: 1.5rem;
+        font-size: 1.6rem;
+        text-align: center;
+        color: #333;
+    }
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+    .form-group label {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+.form-control {
+    width: 100%;
+    padding: 0.6rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    outline: none;
+}
+
+    .form-control:focus {
+        border-color: #007bff;
+    }
+
+.text-danger {
+    font-size: 0.9rem;
+    color: #dc3545;
+}
+
+.form-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1.5rem;
+}
+
+.btn-submit {
+    background: #007bff;
+    color: white;
+    padding: 0.6rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+    .btn-submit:hover {
+        background: #0056b3;
+    }
+
+.btn-cancel {
+    background: #6c757d;
+    color: white;
+    padding: 0.6rem 1.5rem;
+    border-radius: 6px;
+    text-decoration: none;
+}
+
+    .btn-cancel:hover {
+        background: #5a6268;
+    }
